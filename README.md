@@ -1,674 +1,835 @@
-# Java, JavaScript, DOM and React Practical Programs
+# Java, Servlet, JSP, JDBC, HTML, CSS and JavaScript Practical Answers (Compact)
 
-## 1. Find the area of circle, square and rectangle using class and objects
+> **Notes**
+> - Save each Java program in a file matching its `public class` name.
+> - Servlet examples use `jakarta.servlet.*` (Tomcat 10+). For Tomcat 9 or older, use `javax.servlet.*`.
+> - Run Servlets/JSP on Tomcat. The JDBC example uses MySQL; create the database/table and update the password first.
+
+## Quick Navigation
+
+1. [Student details](#q1-student-details)
+2. [Constructor overloading](#q2-constructor-overloading)
+3. [Method overloading](#q3-method-overloading)
+4. [Single inheritance](#q4-single-inheritance)
+5. [Multilevel inheritance](#q5-multilevel-inheritance)
+6. [Hierarchical inheritance](#q6-hierarchical-inheritance)
+7. [Welcome Servlet](#q7-welcome-servlet)
+8. [HTML form with Servlet](#q8-html-form-with-servlet)
+9. [Welcome JSP](#q9-welcome-jsp)
+10. [Student details JSP](#q10-student-details-jsp)
+11. [JDBC CRUD application](#q11-jdbc-crud-application)
+12. [Student registration form](#q12-student-registration-form-with-css)
+13. [College department webpage](#q13-college-department-webpage)
+14. [Email validation](#q14-javascript-email-validation)
+15. [Registration form validation](#q15-student-registration-form-validation)
+16. [Automatic background change](#q16-change-background-color-every-5-seconds-using-dom)
+
+---
+
+## Q1. Student details
+
+**Aim:** Input and display a student's name, roll number, and marks.
+
+**File: `StudentDetails.java`**
 
 ```java
-class Area {
-    void circle(double r) {
-        System.out.println("Area of Circle: " + (3.14 * r * r));
-    }
+import java.util.Scanner;
 
-    void square(double side) {
-        System.out.println("Area of Square: " + (side * side));
-    }
-
-    void rectangle(double length, double breadth) {
-        System.out.println("Area of Rectangle: " + (length * breadth));
-    }
-
+public class StudentDetails {
     public static void main(String[] args) {
-        Area a = new Area();
-        a.circle(4);
-        a.square(5);
-        a.rectangle(6, 3);
+        Scanner sc = new Scanner(System.in);
+        Student s = new Student();
+        s.inputDetails(sc);
+        s.displayDetails();
+        sc.close();
+    }
+}
+
+class Student {
+    String name;
+    int rollNumber;
+    float marks;
+
+    void inputDetails(Scanner sc) {
+        System.out.print("Name: ");
+        name = sc.nextLine();
+        System.out.print("Roll number: ");
+        rollNumber = sc.nextInt();
+        System.out.print("Marks: ");
+        marks = sc.nextFloat();
+    }
+
+    void displayDetails() {
+        System.out.println("Name: " + name);
+        System.out.println("Roll number: " + rollNumber);
+        System.out.println("Marks: " + marks);
     }
 }
 ```
 
-## 2. Store and display student details using class and objects
+**Result:** The program accepts and displays student details.
+
+---
+
+## Q2. Constructor overloading
+
+**Aim:** Use a default constructor for a welcome message and a parameterized constructor to display a sum.
+
+**File: `Calculator.java`**
 
 ```java
-class Student {
-    String name = "Rahul";
-    int rollNo = 101;
-    String branch = "Computer Engineering";
+public class Calculator {
+    Calculator() {
+        System.out.println("Welcome to Calculator!");
+    }
 
-    void display() {
-        System.out.println("Name: " + name);
-        System.out.println("Roll Number: " + rollNo);
-        System.out.println("Branch: " + branch);
+    Calculator(int a, int b) {
+        System.out.println("Sum: " + (a + b));
     }
 
     public static void main(String[] args) {
+        new Calculator();
+        new Calculator(10, 20);
+    }
+}
+```
+
+**Result:** Constructor overloading is demonstrated.
+
+---
+
+## Q3. Method overloading
+
+**Aim:** Overload `add()` with no parameters, two integers, and three floats.
+
+**File: `MethodOverloading.java`**
+
+```java
+public class MethodOverloading {
+    int add() {
+        return 5 + 10;
+    }
+
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    float add(float a, float b, float c) {
+        return a + b + c;
+    }
+
+    public static void main(String[] args) {
+        MethodOverloading m = new MethodOverloading();
+        System.out.println("Default sum: " + m.add());
+        System.out.println("Integer sum: " + m.add(4, 6));
+        System.out.println("Float sum: " + m.add(1.5f, 2.5f, 3.0f));
+    }
+}
+```
+
+**Result:** Method overloading is demonstrated using three different parameter lists.
+
+---
+
+## Q4. Single inheritance
+
+**Aim:** Create `Student` as a subclass of `Person`.
+
+**File: `SingleInheritance.java`**
+
+```java
+class Person {
+    String name;
+    int age;
+}
+
+class Student extends Person {
+    String course;
+    int rollNumber;
+
+    void display() {
+        System.out.println(name + ", " + age);
+        System.out.println(course + ", Roll No: " + rollNumber);
+    }
+}
+
+public class SingleInheritance {
+    public static void main(String[] args) {
         Student s = new Student();
+        s.name = "Amit";
+        s.age = 19;
+        s.course = "Computer Engineering";
+        s.rollNumber = 101;
         s.display();
     }
 }
 ```
 
-## 3. Check whether a number is even or odd
+**Result:** `Student` inherits `name` and `age` from `Person`.
 
-```java
-import java.util.Scanner;
+---
 
-public class EvenOdd {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter a number: ");
-        int n = sc.nextInt();
+## Q5. Multilevel inheritance
 
-        if (n % 2 == 0)
-            System.out.println("Even number");
-        else
-            System.out.println("Odd number");
+**Aim:** Extend `Student` into `GraduateStudent` with `graduationYear`.
 
-        sc.close();
-    }
-}
-```
-
-## 4. Find the maximum of two numbers using method overloading (`int` and `double`)
-
-```java
-class Maximum {
-    int max(int a, int b) {
-        return (a > b) ? a : b;
-    }
-
-    double max(double a, double b) {
-        return (a > b) ? a : b;
-    }
-
-    public static void main(String[] args) {
-        Maximum m = new Maximum();
-        System.out.println("Maximum integer: " + m.max(10, 20));
-        System.out.println("Maximum double: " + m.max(5.5, 2.8));
-    }
-}
-```
-
-## 5. Constructor overloading for an Employee class
-
-```java
-class Employee {
-    String name;
-    double salary;
-
-    Employee() {
-        name = "Unknown";
-        salary = 0;
-    }
-
-    Employee(String n) {
-        name = n;
-        salary = 0;
-    }
-
-    Employee(String n, double s) {
-        name = n;
-        salary = s;
-    }
-
-    void display() {
-        System.out.println("Name: " + name + ", Salary: " + salary);
-    }
-
-    public static void main(String[] args) {
-        Employee e1 = new Employee();
-        Employee e2 = new Employee("Amit");
-        Employee e3 = new Employee("Priya", 25000);
-
-        e1.display();
-        e2.display();
-        e3.display();
-    }
-}
-```
-
-## 6. Overload `add()` to sum two or three integers
-
-```java
-class Addition {
-    int add(int a, int b) {
-        return a + b;
-    }
-
-    int add(int a, int b, int c) {
-        return a + b + c;
-    }
-
-    public static void main(String[] args) {
-        Addition obj = new Addition();
-        System.out.println("Sum of two numbers: " + obj.add(10, 20));
-        System.out.println("Sum of three numbers: " + obj.add(10, 20, 30));
-    }
-}
-```
-
-## 7. Constructor overloading for Student name and grade
-
-```java
-class Student {
-    String name;
-    char grade;
-
-    Student(String n) {
-        name = n;
-        grade = '-';
-    }
-
-    Student(String n, char g) {
-        name = n;
-        grade = g;
-    }
-
-    void display() {
-        System.out.println("Name: " + name + ", Grade: " + grade);
-    }
-
-    public static void main(String[] args) {
-        Student s1 = new Student("Asha");
-        Student s2 = new Student("Rohan", 'A');
-        s1.display();
-        s2.display();
-    }
-}
-```
-
-## 8. Multilevel inheritance: Person → Employee → Manager
+**File: `MultilevelInheritance.java`**
 
 ```java
 class Person {
-    void showPerson() {
-        System.out.println("I am a person");
+    String name;
+    int age;
+}
+
+class Student extends Person {
+    String course;
+    int rollNumber;
+}
+
+class GraduateStudent extends Student {
+    int graduationYear;
+
+    void display() {
+        System.out.println(name + ", Age: " + age);
+        System.out.println(course + ", Roll No: " + rollNumber);
+        System.out.println("Graduation Year: " + graduationYear);
     }
 }
 
-class Employee extends Person {
-    void showEmployee() {
-        System.out.println("I am an employee");
-    }
-}
-
-class Manager extends Employee {
-    void showManager() {
-        System.out.println("I am a manager");
-    }
-
+public class MultilevelInheritance {
     public static void main(String[] args) {
-        Manager m = new Manager();
-        m.showPerson();
-        m.showEmployee();
-        m.showManager();
+        GraduateStudent g = new GraduateStudent();
+        g.name = "Priya";
+        g.age = 22;
+        g.course = "Computer Science";
+        g.rollNumber = 25;
+        g.graduationYear = 2027;
+        g.display();
     }
 }
 ```
 
-## 9. Handle division by zero using try and catch
+**Result:** Multilevel inheritance is demonstrated: `Person → Student → GraduateStudent`.
+
+---
+
+## Q6. Hierarchical inheritance
+
+**Aim:** Create `Student`, `Teacher`, and `Administrator` subclasses of `Person`.
+
+**File: `HierarchicalInheritance.java`**
 
 ```java
-public class ArithmeticExceptionDemo {
+class Person {
+    String name;
+    int age;
+    void show() {
+        System.out.println(name + ", Age: " + age);
+    }
+}
+
+class Student extends Person {
+    int rollNumber;
+    void display() {
+        show();
+        System.out.println("Roll No: " + rollNumber);
+    }
+}
+
+class Teacher extends Person {
+    String subject;
+    void display() {
+        show();
+        System.out.println("Subject: " + subject);
+    }
+}
+
+class Administrator extends Person {
+    String role;
+    void display() {
+        show();
+        System.out.println("Role: " + role);
+    }
+}
+
+public class HierarchicalInheritance {
     public static void main(String[] args) {
-        try {
-            int a = 10, b = 0;
-            System.out.println("Result: " + (a / b));
-        } catch (ArithmeticException e) {
-            System.out.println("Error: Cannot divide by zero.");
+        Student s = new Student();
+        s.name = "Rohan";
+        s.age = 18;
+        s.rollNumber = 12;
+
+        Teacher t = new Teacher();
+        t.name = "Mrs. Sharma";
+        t.age = 35;
+        t.subject = "Java";
+
+        Administrator a = new Administrator();
+        a.name = "Mr. Adam";
+        a.age = 42;
+        a.role = "Admin";
+
+        s.display();
+        t.display();
+        a.display();
+    }
+}
+```
+
+**Result:** Multiple classes inherit from the same base class `Person`.
+
+---
+
+## Q7. Welcome Servlet
+
+**Aim:** Display a welcome message in a browser.
+
+**File: `WelcomeServlet.java`**
+
+```java
+import java.io.*;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+
+@WebServlet("/welcome")
+public class WelcomeServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        res.setContentType("text/html");
+        res.getWriter().println("<h1>Welcome to Java Servlets!</h1>");
+    }
+}
+```
+
+Run on Tomcat and visit `http://localhost:8080/YourProjectName/welcome`.
+
+**Result:** The Servlet displays a welcome message.
+
+---
+
+## Q8. HTML form with Servlet
+
+**Aim:** Accept a user's name from an HTML form and display it.
+
+### File 1: `name-form.html`
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+    <form action="display-name" method="post">
+        Name: <input name="name" required>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
+```
+
+### File 2: `DisplayNameServlet.java`
+
+```java
+import java.io.*;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+
+@WebServlet("/display-name")
+public class DisplayNameServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        res.setContentType("text/html;charset=UTF-8");
+        String name = req.getParameter("name");
+        if (name == null || name.trim().isEmpty()) {
+            name = "Guest";
+        }
+
+        // Escape HTML special characters before displaying user input.
+        name = name.replace("&", "&amp;").replace("<", "&lt;")
+                   .replace(">", "&gt;").replace("\\"", "&quot;")
+                   .replace("'", "&#39;");
+        res.getWriter().println("<h2>Welcome, " + name + "!</h2>");
+    }
+}
+```
+
+**Result:** The Servlet receives and displays the submitted name.
+
+---
+
+## Q9. Welcome JSP
+
+**Aim:** Display a welcome message using JSP.
+
+**File: `welcome.jsp`**
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" %>
+<html>
+<body>
+    <h1>Welcome to JavaServer Pages (JSP)!</h1>
+</body>
+</html>
+```
+
+**Result:** JSP displays the welcome message in a browser.
+
+---
+
+## Q10. Student details JSP
+
+**Aim:** Display name, register number, and department.
+
+**File: `student.jsp`**
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" %>
+<html>
+<body>
+    <h2>Student Details</h2>
+    <p>Name: Rahul</p>
+    <p>Register Number: 123456</p>
+    <p>Department: Computer Engineering</p>
+</body>
+</html>
+```
+
+Replace the sample details with your own.
+
+**Result:** The JSP page displays the student's details.
+
+---
+
+## Q11. JDBC CRUD application
+
+**Aim:** Insert, update, delete, and display student records using JDBC.
+
+### Step 1: Create database
+
+```sql
+CREATE DATABASE college;
+USE college;
+CREATE TABLE students (
+    roll_no INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    marks FLOAT NOT NULL
+);
+```
+
+### Step 2: Java program
+
+**File: `StudentJDBC.java`**
+
+> Add MySQL Connector/J to your classpath and set your database password below.
+
+```java
+import java.sql.*;
+import java.util.Scanner;
+
+public class StudentJDBC {
+    static final String URL = "jdbc:mysql://localhost:3306/college";
+    static final String USER = "root";
+    static final String PASS = "your_password";
+
+    static Connection connect() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASS);
+    }
+
+    static void insert(Scanner sc) throws SQLException {
+        System.out.print("Roll, name, marks: ");
+        int roll = sc.nextInt();
+        sc.nextLine();
+        String name = sc.nextLine();
+        float marks = sc.nextFloat();
+
+        try (Connection c = connect();
+             PreparedStatement p = c.prepareStatement(
+                 "INSERT INTO students VALUES (?, ?, ?)")) {
+            p.setInt(1, roll);
+            p.setString(2, name);
+            p.setFloat(3, marks);
+            p.executeUpdate();
+            System.out.println("Inserted.");
+        }
+    }
+
+    static void update(Scanner sc) throws SQLException {
+        System.out.print("Roll number and new marks: ");
+        int roll = sc.nextInt();
+        float marks = sc.nextFloat();
+
+        try (Connection c = connect();
+             PreparedStatement p = c.prepareStatement(
+                 "UPDATE students SET marks=? WHERE roll_no=?")) {
+            p.setFloat(1, marks);
+            p.setInt(2, roll);
+            System.out.println(p.executeUpdate() > 0 ? "Updated." : "Not found.");
+        }
+    }
+
+    static void delete(Scanner sc) throws SQLException {
+        System.out.print("Roll number to delete: ");
+        int roll = sc.nextInt();
+
+        try (Connection c = connect();
+             PreparedStatement p = c.prepareStatement(
+                 "DELETE FROM students WHERE roll_no=?")) {
+            p.setInt(1, roll);
+            System.out.println(p.executeUpdate() > 0 ? "Deleted." : "Not found.");
+        }
+    }
+
+    static void display() throws SQLException {
+        try (Connection c = connect();
+             Statement s = c.createStatement();
+             ResultSet r = s.executeQuery("SELECT * FROM students")) {
+            while (r.next())
+                System.out.println(
+                    r.getInt("roll_no") + " | "
+                    + r.getString("name") + " | "
+                    + r.getFloat("marks")
+                );
+        }
+    }
+
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(System.in)) {
+            while (true) {
+                System.out.print("\\n1.Insert 2.Update 3.Delete 4.Display 5.Exit: ");
+                int choice = sc.nextInt();
+                try {
+                    switch (choice) {
+                        case 1:
+                            insert(sc);
+                            break;
+                        case 2:
+                            update(sc);
+                            break;
+                        case 3:
+                            delete(sc);
+                            break;
+                        case 4:
+                            display();
+                            break;
+                        case 5:
+                            return;
+                        default:
+                            System.out.println("Invalid choice.");
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Database error: " + e.getMessage());
+                }
+            }
         }
     }
 }
 ```
 
-## 10. Interactive Biodata/Profile webpage using HTML, CSS and JavaScript
+**Result:** The menu-driven JDBC program supports insert, update, delete, and display operations.
 
-Save as `biodata.html` and open it in a browser. Replace the sample details with your own.
+---
+
+## Q12. Student registration form with CSS
+
+**Aim:** Create a styled student registration form.
+
+**File: `registration.html`**
 
 ```html
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Biodata</title>
+    <title>Student Registration</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background: #eef2f7;
-            color: #222;
-            margin: 30px;
         }
-        .card {
-            max-width: 650px;
-            margin: auto;
-            padding: 24px;
+
+        form {
+            max-width: 400px;
+            margin: 30px auto;
+            padding: 22px;
             background: white;
-            border-radius: 12px;
+            border-radius: 10px;
         }
+
+        input, select, button {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 10px;
+            margin: 7px 0;
+        }
+
         button {
-            padding: 9px 14px;
-            margin: 5px;
-            cursor: pointer;
-        }
-        .dark {
-            background: #222;
+            background: #175cd3;
             color: white;
-        }
-        .dark .card {
-            background: #333;
+            border: 0;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1 id="name">My Biodata</h1>
-        <button onclick="welcome()">Welcome</button>
-        <button onclick="toggleTheme()">Change Theme</button>
-        <button onclick="toggleDetails()">Show/Hide Details</button>
-        <p id="message"></p>
-
-        <div id="details">
-            <h2>Personal Details</h2>
-            <p>Name: Your Name</p>
-            <p>Course: Engineering</p>
-
-            <h2>Educational Qualifications</h2>
-            <p>Currently pursuing Engineering.</p>
-
-            <h2>Skills</h2>
-            <p>Java, HTML, CSS, JavaScript</p>
-
-            <h2>Hobbies</h2>
-            <p>Coding, reading, music and sports</p>
-
-            <h2>Achievements</h2>
-            <p>Add your achievements here.</p>
-        </div>
-        <p id="date"></p>
-    </div>
-
-    <script>
-        function welcome() {
-            document.getElementById("message").textContent =
-                "Welcome to my profile!";
-        }
-
-        function toggleTheme() {
-            document.body.classList.toggle("dark");
-        }
-
-        function toggleDetails() {
-            const details = document.getElementById("details");
-            details.style.display =
-                details.style.display === "none" ? "block" : "none";
-        }
-
-        document.getElementById("date").textContent =
-            "Current date and time: " + new Date().toLocaleString();
-    </script>
+    <form>
+        <h2>Student Registration</h2>
+        <input name="name" placeholder="Full name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input name="roll" placeholder="Roll number" required>
+        <select name="course" required>
+            <option value="">Select course</option>
+            <option>Computer Engineering</option>
+            <option>Information Technology</option>
+            <option>Mechanical Engineering</option>
+        </select>
+        <input type="tel" name="phone" placeholder="10-digit mobile number"
+               pattern="[0-9]{10}" required>
+        <button type="submit">Register</button>
+    </form>
 </body>
 </html>
 ```
 
-## 11. Check whether a bank withdrawal is possible
+**Result:** A CSS-styled student registration form is displayed.
 
-```html
-<!DOCTYPE html>
-<html>
-<head><title>Bank Withdrawal</title></head>
-<body>
-    <h2>Bank Withdrawal Check</h2>
-    <label>Account Balance: <input type="number" id="balance"></label><br><br>
-    <label>Withdrawal Amount: <input type="number" id="amount"></label><br><br>
-    <button onclick="checkWithdrawal()">Check</button>
-    <p id="result"></p>
+---
 
-    <script>
-        function checkWithdrawal() {
-            let balance = Number(document.getElementById("balance").value);
-            let amount = Number(document.getElementById("amount").value);
+## Q13. College department webpage
 
-            if (balance < 0 || amount <= 0) {
-                document.getElementById("result").textContent =
-                    "Enter valid amounts.";
-            } else if (amount <= balance) {
-                document.getElementById("result").textContent =
-                    "Withdrawal is possible.";
-            } else {
-                document.getElementById("result").textContent =
-                    "Insufficient balance.";
-            }
-        }
-    </script>
-</body>
-</html>
-```
+**Aim:** Display faculty details, course information, and contact details.
 
-## 12. Check voting eligibility using age
-
-```html
-<!DOCTYPE html>
-<html>
-<head><title>Voting Eligibility</title></head>
-<body>
-    <h2>Voting Eligibility Check</h2>
-    <label>Enter age: <input type="number" id="age"></label>
-    <button onclick="checkAge()">Check</button>
-    <p id="result"></p>
-
-    <script>
-        function checkAge() {
-            let age = Number(document.getElementById("age").value);
-
-            if (age < 0 || document.getElementById("age").value === "") {
-                document.getElementById("result").textContent =
-                    "Enter a valid age.";
-            } else if (age >= 18) {
-                document.getElementById("result").textContent =
-                    "You are eligible to vote.";
-            } else {
-                document.getElementById("result").textContent =
-                    "You are not eligible to vote.";
-            }
-        }
-    </script>
-</body>
-</html>
-```
-
-## 13. Validate an email address (`@` and `.`)
-
-```html
-<!DOCTYPE html>
-<html>
-<head><title>Email Validation</title></head>
-<body>
-    <h2>Email Validation</h2>
-    <input type="text" id="email" placeholder="Enter email">
-    <button onclick="validateEmail()">Submit</button>
-
-    <script>
-        function validateEmail() {
-            let email = document.getElementById("email").value;
-
-            while (!email.includes("@") || !email.includes(".")) {
-                alert("Invalid email. Please enter an email containing @ and .");
-                email = prompt("Re-enter your email address:") || "";
-                if (email === "") {
-                    alert("Email entry cancelled.");
-                    return;
-                }
-            }
-
-            document.getElementById("email").value = email;
-            alert("Email accepted.");
-        }
-    </script>
-</body>
-</html>
-```
-
-## 14. Validate a 6-digit OTP
-
-```html
-<!DOCTYPE html>
-<html>
-<head><title>OTP Validation</title></head>
-<body>
-    <h2>OTP Validation</h2>
-    <input type="text" id="otp" maxlength="6" placeholder="Enter 6-digit OTP">
-    <button onclick="validateOTP()">Validate</button>
-    <p id="result"></p>
-
-    <script>
-        function validateOTP() {
-            let otp = document.getElementById("otp").value;
-
-            if (/^[0-9]{6}$/.test(otp)) {
-                document.getElementById("result").textContent = "Valid OTP format.";
-            } else {
-                document.getElementById("result").textContent =
-                    "Invalid OTP. Enter exactly 6 digits.";
-            }
-        }
-    </script>
-</body>
-</html>
-```
-
-## 15. Validate a mobile number
-
-```html
-<!DOCTYPE html>
-<html>
-<head><title>Mobile Number Validation</title></head>
-<body>
-    <h2>Mobile Number Validation</h2>
-    <input type="text" id="mobile" maxlength="10" placeholder="Enter 10-digit mobile number">
-    <button onclick="validateMobile()">Validate</button>
-    <p id="result"></p>
-
-    <script>
-        function validateMobile() {
-            let mobile = document.getElementById("mobile").value;
-
-            if (/^[6-9][0-9]{9}$/.test(mobile)) {
-                document.getElementById("result").textContent =
-                    "Valid mobile number.";
-            } else {
-                document.getElementById("result").textContent =
-                    "Invalid mobile number.";
-            }
-        }
-    </script>
-</body>
-</html>
-```
-
-## 16. Show or hide a password using DOM
-
-```html
-<!DOCTYPE html>
-<html>
-<head><title>Show/Hide Password</title></head>
-<body>
-    <h2>Password</h2>
-    <input type="password" id="password" placeholder="Enter password">
-    <button onclick="togglePassword()">Show</button>
-
-    <script>
-        function togglePassword() {
-            let input = document.getElementById("password");
-            let button = document.querySelector("button");
-
-            if (input.type === "password") {
-                input.type = "text";
-                button.textContent = "Hide";
-            } else {
-                input.type = "password";
-                button.textContent = "Show";
-            }
-        }
-    </script>
-</body>
-</html>
-```
-
-## 17. Change webpage to dark mode using DOM
+**File: `department.html`**
 
 ```html
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dark Mode</title>
+    <title>Computer Engineering Department</title>
     <style>
-        body { font-family: Arial; padding: 30px; }
-        .dark { background: #222; color: white; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        header, footer {
+            background: #173b70;
+            color: white;
+            text-align: center;
+            padding: 18px;
+        }
+
+        nav {
+            background: #102a50;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 10px;
+        }
+
+        section {
+            background: white;
+            margin: 18px auto;
+            padding: 18px;
+            max-width: 800px;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
-    <h2>Dark Mode Demo</h2>
-    <p>Click the button to change the theme.</p>
-    <button onclick="document.body.classList.toggle('dark')">
-        Toggle Dark Mode
-    </button>
+    <header>
+        <h1>ABC College of Engineering</h1>
+        <h2>Computer Engineering Department</h2>
+    </header>
+    <nav>
+        <a href="#faculty">Faculty</a>
+        <a href="#courses">Courses</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <section>
+        <h2>About</h2>
+        <p>The department teaches programming, databases, networking and web development.</p>
+    </section>
+
+    <section id="faculty">
+        <h2>Faculty Details</h2>
+        <table>
+            <tr><th>Name</th><th>Designation</th><th>Subject</th></tr>
+            <tr><td>Dr. Sharma</td><td>HOD</td><td>Networks</td></tr>
+            <tr><td>Prof. Smith</td><td>Lecturer</td><td>Java</td></tr>
+        </table>
+    </section>
+
+    <section id="courses">
+        <h2>Courses</h2>
+        <ul><li>Java</li><li>DBMS</li><li>Computer Networks</li><li>Web Development</li></ul>
+    </section>
+
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>Address: ABC College, Your City</p>
+        <p>Email: computer@example.com</p>
+        <p>Phone: 00000 00000</p>
+    </section>
+
+    <footer>&copy; 2026 ABC College</footer>
 </body>
 </html>
 ```
 
-## 18. Change webpage background color every 5 seconds using DOM
+**Result:** The webpage contains faculty, course, and contact information.
+
+---
+
+## Q14. JavaScript email validation
+
+**Aim:** Check whether an entered email address has a valid basic format.
+
+**File: `email-validation.html`**
 
 ```html
 <!DOCTYPE html>
 <html>
-<head><title>Automatic Background Color</title></head>
 <body>
-    <h2>Background Color Changes Every 5 Seconds</h2>
+    <h2>Email Validation</h2>
+    <input id="email" placeholder="Enter email">
+    <button onclick="validateEmail()">Check</button>
+    <p id="result"></p>
 
     <script>
-        const colors = ["lightblue", "lightgreen", "lightyellow",
-                        "lightpink", "lavender"];
-        let index = 0;
+        function validateEmail() {
+            let e = document.getElementById("email").value.trim();
+        let pattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
 
-        setInterval(function() {
-            document.body.style.backgroundColor = colors[index];
-            index = (index + 1) % colors.length;
+        if (pattern.test(e)) {
+            document.getElementById("result").textContent = "Valid email";
+        } else {
+            document.getElementById("result").textContent = "Invalid email";
+        }
+        }
+    </script>
+</body>
+</html>
+```
+
+**Result:** The program displays whether the email matches a basic email pattern.
+
+---
+
+## Q15. Student registration form validation
+
+**Aim:** Validate name, email, and password using JavaScript.
+
+**File: `form-validation.html`**
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Validation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+        }
+
+        form {
+            max-width: 350px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+        }
+
+        input, button {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 9px;
+            margin: 7px 0;
+        }
+    </style>
+</head>
+<body>
+    <form id="form">
+        <h2>Student Registration</h2>
+        <input id="name" placeholder="Name" required>
+        <input id="email" placeholder="Email" required>
+        <input id="password" type="password" placeholder="Password" required>
+        <button>Register</button>
+        <p id="msg"></p>
+    </form>
+
+    <script>
+        document.getElementById("form").onsubmit = function(e) {
+            e.preventDefault();
+            let n = document.getElementById("name").value.trim();
+            let mail = document.getElementById("email").value.trim();
+            let pass = document.getElementById("password").value;
+            let msg = document.getElementById("msg");
+
+            if (n.length < 2) {
+                msg.textContent = "Enter a valid name.";
+            } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(mail)) {
+                msg.textContent = "Enter a valid email.";
+            } else if (pass.length < 8) {
+                msg.textContent = "Password must be at least 8 characters.";
+            } else {
+                msg.textContent = "Registration details are valid.";
+            }
+        };
+    </script>
+</body>
+</html>
+```
+
+**Result:** The form checks the name, email format, and password length. Real applications should also validate on the server.
+
+---
+
+## Q16. Change background color every 5 seconds using DOM
+
+**Aim:** Automatically change the background color every five seconds.
+
+**File: `background-change.html`**
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Background changes every 5 seconds</h2>
+    <script>
+        const colors = [
+            "lightblue",
+            "lightgreen",
+            "lightyellow",
+            "lightpink",
+            "lavender"
+        ];
+        let i = 0;
+
+        setInterval(() => {
+            document.body.style.backgroundColor = colors[i];
+            i = (i + 1) % colors.length;
         }, 5000);
     </script>
 </body>
 </html>
 ```
 
-## 19. Show and hide a website menu using DOM
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Show/Hide Menu</title>
-    <style>
-        #menu { background: #eee; padding: 15px; width: 150px; }
-        #menu a { display: block; padding: 6px; }
-    </style>
-</head>
-<body>
-    <h2>Website Menu</h2>
-    <button onclick="toggleMenu()">Show/Hide Menu</button>
-
-    <div id="menu">
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-    </div>
-
-    <script>
-        function toggleMenu() {
-            let menu = document.getElementById("menu");
-            menu.style.display = menu.style.display === "none" ? "block" : "none";
-        }
-    </script>
-</body>
-</html>
-```
-
-## 20. React app: accept a name and display a greeting using `useState`
-
-```jsx
-import { useState } from "react";
-
-function App() {
-    const [name, setName] = useState("");
-
-    return (
-        <div>
-            <h2>Greeting App</h2>
-            <input
-                type="text"
-                placeholder="Enter your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
-            <h3>Hello, {name || "Guest"}!</h3>
-        </div>
-    );
-}
-
-export default App;
-```
-
-## 21. React app: display student information using components and props
-
-```jsx
-function Student(props) {
-    return (
-        <div>
-            <h2>Student Information</h2>
-            <p>Name: {props.name}</p>
-            <p>Roll Number: {props.rollNo}</p>
-            <p>Branch: {props.branch}</p>
-        </div>
-    );
-}
-
-function App() {
-    return (
-        <Student
-            name="Rahul"
-            rollNo="101"
-            branch="Computer Engineering"
-        />
-    );
-}
-
-export default App;
-```
-
-## 22. React app: color buttons using Hooks and event handling
-
-```jsx
-import { useState } from "react";
-
-function App() {
-    const [message, setMessage] = useState("");
-
-    return (
-        <div>
-            <h2>Select a Color</h2>
-            <button onClick={() => setMessage("You selected Red")}>Red</button>
-            <button onClick={() => setMessage("You selected Blue")}>Blue</button>
-            <button onClick={() => setMessage("You selected Green")}>Green</button>
-            <button onClick={() => setMessage("You selected Yellow")}>Yellow</button>
-            <p>{message}</p>
-        </div>
-    );
-}
-
-export default App;
-```
-
-## 23. React app: show and hide a message using a button
-
-```jsx
-import { useState } from "react";
-
-function App() {
-    const [show, setShow] = useState(false);
-
-    return (
-        <div>
-            <h2>Show/Hide Message</h2>
-            <button onClick={() => setShow(!show)}>
-                {show ? "Hide Message" : "Show Message"}
-            </button>
-
-            {show && <p>Hello! This is a hidden message.</p>}
-        </div>
-    );
-}
-
-export default App;
-```
+**Result:** The DOM changes the page background automatically every five seconds without user action.
 
 ---
 
-**Notes:**
-- For Java programs, save each program in a `.java` file whose name matches its `public` class, if present.
-- For Questions 10–19, save each HTML program in its own `.html` file and open it in a browser.
-- For Questions 20–23, place the code in `App.jsx` in a React project created with a tool such as Vite. These are component examples, not standalone HTML files.
+## End
+
+All 16 practical answers are included in compact form. Save each HTML example separately and open it in a browser. Run Java programs using a JDK, and deploy Servlet/JSP programs on Tomcat. For JDBC, configure MySQL and its JDBC driver first.
